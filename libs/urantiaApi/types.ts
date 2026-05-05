@@ -60,6 +60,49 @@ export type ApiParagraphResponse = {
   data: ApiParagraph;
 };
 
+// One Bible chunk semantically related to a Urantia paragraph (UB → Bible).
+export type ApiBibleParallel = {
+  chunkId: string;
+  reference: string;
+  bookCode: string;
+  chapter: number;
+  verseStart: number;
+  verseEnd: number;
+  text: string;
+  similarity: number;
+  rank: number;
+  source: string;
+  embeddingModel: string;
+};
+
+// One Urantia paragraph semantically related to another Urantia paragraph (UB → UB).
+export type ApiUrantiaParallel = {
+  id: string;
+  standardReferenceId: string;
+  paperId: string;
+  paperTitle: string;
+  sectionTitle: string | null;
+  text: string;
+  similarity: number;
+  rank: number;
+  source: string;
+  embeddingModel: string;
+};
+
+// GET /paragraphs/{ref}?include=bibleParallels,urantiaParallels response
+export type ApiParagraphWithParallelsResponse = {
+  data: ApiParagraph & {
+    bibleParallels: ApiBibleParallel[];
+    urantiaParallels: ApiUrantiaParallel[];
+  };
+};
+
+// Consumer-facing return shape for fetchParagraphParallels.
+export type ParagraphParallels = {
+  urantiaParallels: ApiUrantiaParallel[];
+  bibleParallels: ApiBibleParallel[];
+};
+
 // POST /search result item (htmlText is already enriched with highlight spans)
 export type ApiSearchResult = ApiParagraph & {
   rank: number;

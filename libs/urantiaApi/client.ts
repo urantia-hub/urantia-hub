@@ -13,8 +13,10 @@ import {
 import type {
   ApiPaperDetailResponse,
   ApiParagraphResponse,
+  ApiParagraphWithParallelsResponse,
   ApiSearchResponse,
   ApiTocResponse,
+  ParagraphParallels,
 } from "./types";
 
 const API_HOST = process.env.NEXT_PUBLIC_URANTIA_DEV_API_HOST;
@@ -112,6 +114,29 @@ export async function fetchParagraph(ref: string): Promise<UBNode> {
   }
   const json: ApiParagraphResponse = await res.json();
   return mapParagraphToUBNode(json.data);
+}
+
+/**
+ * Fetch a paragraph's pre-computed cross-references (Bible + Urantia parallels).
+ * Powers the per-paragraph "Cross-references" modal in the reader.
+ */
+export async function fetchParagraphParallels(
+  ref: string
+): Promise<ParagraphParallels> {
+  const url = `${API_HOST}/paragraphs/${encodeURIComponent(
+    ref
+  )}?include=bibleParallels,urantiaParallels`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch parallels for ${ref}: ${res.status} ${res.statusText}`
+    );
+  }
+  const json: ApiParagraphWithParallelsResponse = await res.json();
+  return {
+    urantiaParallels: json.data.urantiaParallels ?? [],
+    bibleParallels: json.data.bibleParallels ?? [],
+  };
 }
 
 /**

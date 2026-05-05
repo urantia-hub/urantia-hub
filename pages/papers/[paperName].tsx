@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   BookmarkIcon,
   Ellipsis,
+  Link2,
   MessageSquareTextIcon,
   Pause,
   PlayIcon,
@@ -13,7 +14,7 @@ import {
 import { Note as NoteType, Bookmark } from "@prisma/client";
 import { Noto_Serif } from "next/font/google";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useWakeLock } from "react-screen-wake-lock";
@@ -24,6 +25,7 @@ import Footer from "@/components/Footer";
 import HeadTag from "@/components/HeadTag";
 import Navbar from "@/components/Navbar";
 import Note from "@/components/Note";
+import RelatedWorks from "@/components/RelatedWorks";
 import Share from "@/components/Share";
 import Spinner from "@/components/Spinner";
 import TopReadingNavbar from "@/components/TopReadingNavbar";
@@ -38,6 +40,8 @@ import {
   getValidPaperUrls,
   paperIdToUrl,
 } from "@/utils/paperFormatters";
+import { fetchParagraphParallels } from "@/libs/urantiaApi/client";
+import type { ParagraphParallels } from "@/libs/urantiaApi/types";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useFontSize } from "@/hooks/useFontSize";
@@ -131,6 +135,34 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
   const shareNode = selectedGlobalIdShare
     ? nodes.find((node) => node.globalId === selectedGlobalIdShare)
     : undefined;
+
+  // Cross-references modal: fetch parallels on demand, cache per globalId.
+  const parallelsCacheRef = useRef<Map<string, ParagraphParallels>>(new Map());
+  const [parallelsLoading, setParallelsLoading] = useState(false);
+  const [parallelsError, setParallelsError] = useState("");
+  const [activeParallels, setActiveParallels] = useState<ParagraphParallels | null>(null);
+
+  useEffect(() => {
+    if (!selectedGlobalIdRelatedWorks) {
+      setActiveParallels(null);
+      setParallelsError("");
+      return;
+    }
+    const cached = parallelsCacheRef.current.get(selectedGlobalIdRelatedWorks);
+    if (cached) {
+      setActiveParallels(cached);
+      return;
+    }
+    setParallelsLoading(true);
+    setParallelsError("");
+    fetchParagraphParallels(selectedGlobalIdRelatedWorks)
+      .then((data) => {
+        parallelsCacheRef.current.set(selectedGlobalIdRelatedWorks, data);
+        setActiveParallels(data);
+      })
+      .catch((err: Error) => setParallelsError(err.message ?? "Failed to load"))
+      .finally(() => setParallelsLoading(false));
+  }, [selectedGlobalIdRelatedWorks]);
 
   // Wrap hookOnBookmarkClick to show toast with "Assign to category" button
   const onBookmarkClick = (node: UBNode) => {
@@ -522,6 +554,18 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
                       </button>
                     )}
 
+                    {/* Cross-references Button */}
+                    {expandedGlobalId === node.globalId && (
+                      <button
+                        aria-label="Cross-references"
+                        className="bg-transparent border-0 dark:border-0 p-0 dark:p-0 m-0 focus:outline-0 focus:dark:outline-0 text-gray-400 dark:text-gray-400 text-sm hover:text-sky-500 hover:dark:text-sky-400 transition duration-300 ease-in-out relative mr-2 fade-in"
+                        onClick={() => setSelectedGlobalIdRelatedWorks(node.globalId)}
+                        type="button"
+                      >
+                        <Link2 className="w-5 h-5" />
+                      </button>
+                    )}
+
                     {/* Notes Button */}
                     {status === "authenticated" &&
                       (expandedGlobalId === node.globalId ||
@@ -767,6 +811,18 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
       {/* Share Modal */}
       {selectedGlobalIdShare && (
         <Share onClose={onShareClose} node={shareNode} />
+      )}
+
+      {/* Cross-references Modal */}
+      {selectedGlobalIdRelatedWorks && (
+        <RelatedWorks
+          node={relatedWorksNode}
+          onClose={onRelatedWorksClose}
+          urantiaParallels={activeParallels?.urantiaParallels ?? []}
+          bibleParallels={activeParallels?.bibleParallels ?? []}
+          loading={parallelsLoading}
+          error={parallelsError}
+        />
       )}
 
       {showBookmarkCategoryModal && (
