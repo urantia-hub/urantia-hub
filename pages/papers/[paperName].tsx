@@ -79,12 +79,16 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
   // Sign-up prompt state.
   const [showSignUpPrompt, setShowSignUpPrompt] = useState<boolean>(false);
 
-  // Get the nodes from the paper data.
-  const nodes = paperData.data.results;
+  // Get the nodes from the paper data. Stay null-safe here: paperData can be
+  // undefined on a failed client-side navigation, and results can be empty when
+  // getStaticProps falls back after an API error. The real guard lives below,
+  // after all hooks have run (so we never call hooks conditionally).
+  const nodes = paperData?.data?.results ?? [];
 
   // Get paper details.
-  const paperId = nodes[0].paperId;
-  const paperTitle = nodes[0].paperTitle;
+  const firstNode = nodes[0];
+  const paperId = firstNode?.paperId ?? "";
+  const paperTitle = firstNode?.paperTitle ?? "";
 
   // Custom hooks.
   const { fontSize, updateFontSize, getFontSizeClasses } = useFontSize();
@@ -119,7 +123,7 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
     skipToNextParagraph,
     skipToPreviousParagraph,
   } = useAudioPlayer(nodes, markParagraphAsRead);
-  const paperIdNumber = parseInt(nodes[0].paperId);
+  const paperIdNumber = parseInt(paperId);
   const nextPaperId = paperIdNumber < 196 ? paperIdNumber + 1 : null;
 
   // Calculate nodes for modals.
@@ -354,8 +358,10 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
     return () => document.removeEventListener("copy", handleCopy);
   }, []);
 
-  // Show a spinner until the content has loaded.
-  if (!paperData) {
+  // Show a spinner until the content has loaded. Covers both an undefined
+  // paperData (failed client-side navigation) and the empty-results fallback
+  // that getStaticProps returns when the upstream API call fails.
+  if (!nodes.length) {
     return <Spinner />;
   }
 
@@ -724,7 +730,7 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
           paperIdNumber > 0
             ? `Urantia Paper ${paperId} - ${paperTitle}`
             : "Urantia Papers Foreword"
-        } - ${paperData.data.results[2].text}`}
+        } - ${paperData?.data?.results?.[2]?.text ?? ""}`}
         titlePrefix={
           paperIdNumber > 0 ? `Paper ${paperId} - ${paperTitle}` : "Foreword"
         }
