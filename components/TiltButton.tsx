@@ -29,9 +29,13 @@ const TiltButton = ({
       "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)";
   };
 
+  // API routes 307 to a page; a client-side transition to one renders the
+  // target page with empty props, so let the browser follow the redirect.
+  const Anchor = href.startsWith("/api/") ? "a" : Link;
+
   return (
     <div style={{ perspective: "1000px" }}>
-      <Link
+      <Anchor
         ref={buttonRef}
         href={href}
         className="inline-block tilt-button fade-in bg-white/95 text-gray-600 font-bold py-4 px-8 rounded-lg
@@ -47,7 +51,7 @@ const TiltButton = ({
         }}
       >
         {children}
-      </Link>
+      </Anchor>
     </div>
   );
 };

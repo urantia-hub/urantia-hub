@@ -64,7 +64,7 @@ describe("pages/api/user/nodes/bookmarks", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    const mod = await import("./index");
+    const mod = await import("@/pages/api/user/nodes/bookmarks");
     handler = mod.default;
   });
 

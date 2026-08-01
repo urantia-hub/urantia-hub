@@ -34,12 +34,15 @@ const Footer = ({ marginBottom }: { marginBottom?: string }) => {
                 </Link>
               </li>
               <li>
-                <Link
+                {/* A plain anchor, not next/link: the href is an API route that
+                    307s, and a client-side transition to it renders the target
+                    page with empty props. */}
+                <a
                   className="text-gray-400 hover:text-blue-400 transition-colors duration-300 hover:no-underline"
                   href={deriveReadLink(status)}
                 >
                   Read
-                </Link>
+                </a>
               </li>
               <li>
                 <Link

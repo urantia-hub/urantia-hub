@@ -55,7 +55,7 @@ describe("pages/api/user/nodes/notes", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    const mod = await import("./index");
+    const mod = await import("@/pages/api/user/nodes/notes");
     handler = mod.default;
   });
 

@@ -97,12 +97,15 @@ const HomepageNavbar = ({
           </Link>
           <LogoSymbol className="flex-1 text-white h-6 w-6 md:h-8 md:w-8" />
           <div className="flex-1 flex justify-end text-base">
-            <Link
+            {/* A plain anchor, not next/link: the href is an API route that 307s,
+                and a client-side transition to it renders the target page with
+                empty props. */}
+            <a
               className="text-center hover:no-underline mr-4 text-white hover:text-white/80 transition-colors duration-200"
               href={continueReadingLink}
             >
               Read
-            </Link>
+            </a>
             {status === "authenticated" && (
               <Link
                 aria-label="More options"

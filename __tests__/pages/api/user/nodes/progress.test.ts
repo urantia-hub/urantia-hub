@@ -67,7 +67,7 @@ describe("pages/api/user/nodes/progress", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    const mod = await import("./index");
+    const mod = await import("@/pages/api/user/nodes/progress");
     handler = mod.default;
   });
 

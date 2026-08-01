@@ -38,7 +38,7 @@ describe("pages/api/urantia-book/search", () => {
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    const mod = await import("./search");
+    const mod = await import("@/pages/api/urantia-book/search");
     handler = mod.default;
   });
 

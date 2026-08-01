@@ -42,10 +42,12 @@ type CuratedQuote = {
 };
 
 type TOCPageProps = {
-  nodes: TOCNode[];
+  nodes?: TOCNode[];
 };
 
-const ReadPage = ({ nodes }: TOCPageProps) => {
+// Nodes defaults to [] because a client-side transition can render this page
+// with empty pageProps, which used to crash the whole page.
+const ReadPage = ({ nodes = [] }: TOCPageProps) => {
   // Hooks.
   const { status } = useSession();
 
