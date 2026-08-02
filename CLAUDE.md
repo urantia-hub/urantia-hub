@@ -24,6 +24,14 @@ npx prisma generate             # Generate Prisma client
 npx prisma studio               # Open Prisma Studio GUI
 ```
 
+### Verifying a Deploy
+
+A failed Vercel build leaves the previous READY deployment serving traffic, so the
+live site looking fine is not evidence that a commit shipped. Two production
+deploys sat in state ERROR for three months before anyone noticed. After pushing,
+check the deployment state through the Vercel MCP (`list_deployments` /
+`get_deployment`) and confirm the commit SHA matches.
+
 ### Specialized Scripts
 ```bash
 npm run screenshots              # Generate screenshots for community resources
@@ -39,7 +47,7 @@ npm run build:with-screenshots   # Generate screenshots then build
 - **Styling**: Tailwind CSS with custom design system in `once-ui/`
 - **Caching**: Redis (IORedis)
 - **Error Tracking**: Sentry
-- **Deployment**: Vercel
+- **Deployment**: Vercel (project `urantia-hub`, team Adams Technologies, deploys from the `kelsonic/UrantiaHub.com` remote on `main`)
 - **AI Integration**: Vercel AI SDK with Anthropic Claude (default), OpenAI, xAI models
 
 ### Project Structure
@@ -164,6 +172,10 @@ Key environment variables (see `.env.example`):
 
 **Paper Content**: Never assume paper content is in the local database; always fetch from `urantia.dev` API
 
+**Linking to redirect API routes**: Use a plain `<a>`, never `next/link`, for hrefs that point at an API route (`deriveReadLink` returns `/api/redirect/user/read`, which 307s to a page). A client-side transition to a non-page can land on the target page with empty `pageProps`, which crashed `/explore` in production. `TiltButton` handles this by branching on `/api/` hrefs.
+
+**Page props are not guaranteed**: Default array props from `getStaticProps` (`{ nodes = [] }`) rather than dereferencing them directly. Same reason as above: the client router can render a page with no props at all.
+
 **TypeScript**: The project uses TypeScript; type definitions in `types/` directory
 
 **Styling**: Use Tailwind CSS classes; custom design tokens in `once-ui/` for consistent theming
@@ -211,6 +223,13 @@ logger.error("message", error);
 
 - Framework: Vitest + React Testing Library
 - Run: `npm run test`
-- Tests cover: hooks (6), services (4), API routes (4), components (4)
+- Tests cover: hooks (6), services (4), API routes (4), components (4), pages (2)
 - Service tests use dependency injection to mock Prisma models
 - API route tests mock `getSessionDetails`, services, and `withSentry`
+
+**Never put test files under `pages/`.** Next treats every file there as a route:
+`vi.mock` runs during page-data collection and hard-fails `next build`, and API
+route tests deploy as live public endpoints. Page and API route tests live in the
+top-level `__tests__/pages/...` mirror and import the subject by alias
+(`await import("@/pages/api/user/nodes/progress")`). Tests colocated with
+`components/`, `hooks/`, and `services/` are fine.
