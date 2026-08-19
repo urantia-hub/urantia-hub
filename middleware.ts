@@ -41,9 +41,7 @@ function getRateLimit(pathname: string): { limit: number; windowMs: number } | n
 
 function getClientIp(request: NextRequest): string {
   return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.ip ||
-    "unknown"
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
   );
 }
 
