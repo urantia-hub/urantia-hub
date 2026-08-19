@@ -32,6 +32,23 @@ deploys sat in state ERROR for three months before anyone noticed. After pushing
 check the deployment state through the Vercel MCP (`list_deployments` /
 `get_deployment`) and confirm the commit SHA matches.
 
+### Two remotes — push both
+
+The repo has two remotes and every main push must go to both:
+- `kelsonic` = `kelsonic/UrantiaHub.com` (private). Vercel deploys from this one.
+- `origin` = `urantia-hub/OpenUrantia.com` (public mirror). Dependabot alerts live here.
+
+A push to `origin` alone deploys nothing; a push to `kelsonic` alone leaves the
+public mirror and its security scanning stale. Keep the histories identical
+(merge commits, not squash, so the mirror can fast-forward).
+
+### Preview deploys skip migrations
+
+`vercel.json` owns the build command. It runs `prisma migrate deploy` only when
+`VERCEL_ENV` is `production` because the Preview environment's DATABASE_URL
+points at a dead database (every preview build failed with P1017 until
+2026-08-18). Previews build and render; they never migrate.
+
 ### Specialized Scripts
 ```bash
 npm run screenshots              # Generate screenshots for community resources
@@ -41,13 +58,14 @@ npm run build:with-screenshots   # Generate screenshots then build
 ## Architecture
 
 ### Framework & Tech Stack
-- **Framework**: Next.js 14 (Pages Router, not App Router)
+- **Framework**: Next.js 15 (Pages Router, not App Router; upgraded from 14 on 2026-08-18)
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: NextAuth.js with email (Resend) and Google OAuth providers
 - **Styling**: Tailwind CSS with custom design system in `once-ui/`
 - **Caching**: Redis (IORedis)
 - **Error Tracking**: Sentry
-- **Deployment**: Vercel (project `urantia-hub`, team Adams Technologies, deploys from the `kelsonic/UrantiaHub.com` remote on `main`)
+- **Deployment**: Vercel (project `urantia-hub`, team Adams Technologies, deploys from the `kelsonic/UrantiaHub.com` remote on `main` — see "Two remotes" above)
+- **Package manager**: yarn v1, and `yarn.lock` is the only lockfile. Do not add a `package-lock.json`; a stale duplicate lockfile hid dependency fixes here before.
 - **AI Integration**: Vercel AI SDK with Anthropic Claude (default), OpenAI, xAI models
 
 ### Project Structure
@@ -198,6 +216,14 @@ All API calls now go through `libs/urantiaApi/client.ts`, which maps new API res
 - Constructs `paperSectionId` and `paperSectionParagraphId` from component fields
 - Defaults `language` to `"eng"`, `type` to `"paragraph"`
 - Search `htmlText` is already enriched with `<span class=urantia-dev-highlighted>` by the API via `ts_headline`
+
+## Dependency Pins
+
+These pins are deliberate — do not "upgrade" them without checking the reason:
+
+- `@testing-library/jest-dom` exact `6.9.1` — 6.10.0 is a botched release that requires Node 22; this machine builds on Node 20.
+- `resolutions` block forces patched transitive versions (axios, follow-redirects, postcss, sharp, rollup) that parent packages pin too low. Keep the block when regenerating the lockfile.
+- `nodemailer` looks unused (Resend sends the emails) but next-auth's EmailProvider imports it at module load, so it must stay a dependency.
 
 ## Known Technical Debt
 
