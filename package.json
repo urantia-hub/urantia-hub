@@ -30,7 +30,7 @@
     "moment": "^2.29.4",
     "next": "15.5.23",
     "next-auth": "^4.24.15",
-    "nodemailer": "^9.0.5",
+    "nodemailer": "^9.1.1",
     "react": "^18",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
