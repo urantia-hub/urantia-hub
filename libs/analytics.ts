@@ -4,7 +4,7 @@ import posthog from "posthog-js";
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
 
-// Hub and Dalamatia share one PostHog project. This property tells them apart.
+// Every Urantia app sends to one PostHog project. This property tells them apart.
 const APP = "hub";
 
 // The event names this app sends. Keep the list short.
@@ -25,7 +25,7 @@ export function initAnalytics(): void {
 
   posthog.init(KEY, {
     api_host: HOST,
-    defaults: "2026-01-30",
+    defaults: "2026-05-30",
     // Anonymous visitors stay anonymous. A person profile exists only after identify().
     person_profiles: "identified_only",
     // One visitor id across urantiahub.com and its subdomains (Dalamatia).

@@ -35,8 +35,9 @@ check the deployment state through the Vercel MCP (`list_deployments` /
 ### Product analytics (PostHog)
 
 `libs/analytics.ts` is the only file that imports `posthog-js`. It is off until
-`NEXT_PUBLIC_POSTHOG_KEY` is set, and every event carries `app: "hub"` (the Hub
-and Dalamatia share one PostHog project).
+`NEXT_PUBLIC_POSTHOG_KEY` is set, and every event carries `app: "hub"`. The Hub,
+Dalamatia (`app: "dalamatia"`), and urantia.dev (`app: "urantia-dev"`) all send
+to one PostHog project (id 642787), so filter by `app` in every insight.
 
 - Named events: `paper_opened`, `section_read`, `search_performed`,
   `community_resource_clicked`. Add a name to the `AnalyticsEvent` type first.
