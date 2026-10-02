@@ -40,6 +40,7 @@ import {
   getValidPaperUrls,
   paperIdToUrl,
 } from "@/utils/paperFormatters";
+import { track } from "@/libs/analytics";
 import { fetchParagraphParallels } from "@/libs/urantiaApi/client";
 import type { ParagraphParallels } from "@/libs/urantiaApi/types";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
@@ -89,6 +90,11 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
   const firstNode = nodes[0];
   const paperId = firstNode?.paperId ?? "";
   const paperTitle = firstNode?.paperTitle ?? "";
+
+  // One event per paper view. The id only, never the text.
+  useEffect(() => {
+    if (paperId) track("paper_opened", { paper_id: paperId });
+  }, [paperId]);
 
   // Custom hooks.
   const { fontSize, updateFontSize, getFontSizeClasses } = useFontSize();

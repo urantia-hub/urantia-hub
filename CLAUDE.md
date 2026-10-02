@@ -32,6 +32,25 @@ deploys sat in state ERROR for three months before anyone noticed. After pushing
 check the deployment state through the Vercel MCP (`list_deployments` /
 `get_deployment`) and confirm the commit SHA matches.
 
+### Product analytics (PostHog)
+
+`libs/analytics.ts` is the only file that imports `posthog-js`. It is off until
+`NEXT_PUBLIC_POSTHOG_KEY` is set, and every event carries `app: "hub"` (the Hub
+and Dalamatia share one PostHog project).
+
+- Named events: `paper_opened`, `section_read`, `search_performed`,
+  `community_resource_clicked`. Add a name to the `AnalyticsEvent` type first.
+- Properties are ids, counts, and labels. Never send paragraph text, search
+  text, an email, or a name. The `q` URL parameter is masked, and autocapture
+  covers controls only, so a click on a paragraph sends nothing.
+- `identifyUser` takes the database user id from the session callback.
+- `initAnalytics()` runs at module load in `pages/_app.tsx`. Do not move it into
+  an effect: a page's effects run before the app's, and the first event of
+  each page is then dropped.
+- `section_read` fires for signed-in readers only, because read tracking is.
+- PostHog drops events from headless browsers. To check payloads locally,
+  point `NEXT_PUBLIC_POSTHOG_HOST` at a local server and use a normal user agent.
+
 ### Two remotes — push both
 
 The repo has two remotes and every main push must go to both:

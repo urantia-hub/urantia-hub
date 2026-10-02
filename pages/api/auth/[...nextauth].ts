@@ -1,8 +1,8 @@
 // Node modules.
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
-import NextAuth from "next-auth";
-import type { Adapter } from "next-auth/adapters";
+import NextAuth, { type Session } from "next-auth";
+import type { Adapter, AdapterUser } from "next-auth/adapters";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 // Relative modules.
 import { getResendClient } from "@/libs/resend";
@@ -44,6 +44,13 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+  callbacks: {
+    // Expose the user id to the client. Analytics identifies by it, never by email.
+    session({ session, user }: { session: Session; user: AdapterUser }) {
+      if (session.user) session.user.id = user.id;
+      return session;
+    },
+  },
   pages: {
     error: "/auth/error",
     signIn: "/auth/sign-in",

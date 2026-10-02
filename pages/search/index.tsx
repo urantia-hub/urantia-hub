@@ -1,6 +1,6 @@
 // Node modules.
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 // Relative modules.
@@ -9,6 +9,7 @@ import HeadTag from "@/components/HeadTag";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Spinner from "@/components/Spinner";
+import { track } from "@/libs/analytics";
 import { paperIdToUrl } from "@/utils/paperFormatters";
 
 const Search = () => {
@@ -18,6 +19,7 @@ const Search = () => {
 
   // State.
   const [query, setQuery] = useState<string>("");
+  const lastTrackedQuery = useRef<string | null>(null);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
@@ -128,6 +130,15 @@ const Search = () => {
 
       // Track the search
       await trackSearch(searchQuery, data.data.results.length);
+      // Counts only. The search text is not sent to analytics. This function
+      // can run twice for one search, so the same query is tracked once.
+      if (lastTrackedQuery.current !== searchQuery) {
+        lastTrackedQuery.current = searchQuery;
+        track("search_performed", {
+          result_count: data.data.results.length,
+          query_length: searchQuery.length,
+        });
+      }
 
       // Update the query param in the URL
       if (router.query.q !== searchQuery) {

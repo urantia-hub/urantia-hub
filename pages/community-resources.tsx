@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import HeadTag from "@/components/HeadTag";
 import HomepageNavbar from "@/components/HomepageNavbar";
+import { track } from "@/libs/analytics";
 
 // Import resource data
 import { resourceCategories } from "../data/resources";
@@ -138,6 +139,13 @@ const CommunityResourcesPage = () => {
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() =>
+                          track("community_resource_clicked", {
+                            resource_name: resource.name,
+                            resource_host: new URL(resource.url).hostname,
+                            category: category.title,
+                          })
+                        }
                         className="group relative flex flex-col h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200"
                       >
                         <div className="relative h-48 overflow-hidden">

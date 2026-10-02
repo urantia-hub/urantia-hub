@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import { ReadNode } from "@prisma/client";
+import { track } from "@/libs/analytics";
 import { AVERAGE_READING_SPEED } from "@/utils/config";
 
 function throttle<T extends (...args: any[]) => any>(fn: T, ms: number): T {
@@ -24,6 +25,7 @@ function throttle<T extends (...args: any[]) => any>(fn: T, ms: number): T {
 export function useReadProgress(paperId: string, paperTitle: string, nodes: UBNode[], status: string) {
   const [readNodes, setReadNodes] = useState<Set<string>>(new Set());
   const readingNodesRef = useRef<Record<string, { startsAt: number; node: UBNode }>>({});
+  const trackedSectionsRef = useRef<Set<string>>(new Set());
 
   const estimatedReadTime = (node: UBNode) => {
     const paragraph = document.getElementById(node.globalId);
@@ -52,6 +54,13 @@ export function useReadProgress(paperId: string, paperTitle: string, nodes: UBNo
 
       const readNode = await response.json();
       setReadNodes((prev) => new Set(prev.add(readNode.globalId)));
+
+      // One analytics event per section per page view, not one per paragraph.
+      const sectionId = node.paperSectionId;
+      if (sectionId && !trackedSectionsRef.current.has(sectionId)) {
+        trackedSectionsRef.current.add(sectionId);
+        track("section_read", { paper_id: node.paperId ?? null, section_id: sectionId });
+      }
     } catch (error) {
       console.error("Error marking paragraph as read:", error);
     }

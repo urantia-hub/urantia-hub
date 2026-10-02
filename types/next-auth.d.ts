@@ -3,6 +3,16 @@ import { User as NextAuthUser } from "next-auth";
 
 // Extend the built-in types for NextAuth User
 declare module "next-auth" {
+  interface Session {
+    user?: {
+      // Set by the session callback in pages/api/auth/[...nextauth].ts
+      id?: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+
   interface User {
     emailNotificationsEnabled?: boolean;
     emailDailyQuoteEnabled?: boolean;
