@@ -2,7 +2,7 @@
 
 A Next.js web application for reading, studying, and engaging with the Urantia Book. Live at [urantiahub.com](https://urantiahub.com).
 
-Paper content is served by [api.urantia.dev](https://urantia.dev) — a separate Hono + Drizzle API on Cloudflare Workers. UrantiaHub fetches content on demand and stores only user data locally.
+Paper content is served by [api.urantia.dev](https://urantia.dev), a separate Hono + Drizzle API on Cloudflare Workers. UrantiaHub fetches content on demand and stores only user data locally.
 
 ---
 
@@ -438,7 +438,12 @@ Both require `CRON_SECRET` header for authorization.
 
 - See `CLAUDE.md` for development conventions and coding patterns
 - See `TODOS.md` for the prioritized improvement roadmap
-- API docs at [urantia.dev](https://urantia.dev)
+
+## Related
+
+- [urantia.dev](https://urantia.dev): the API and MCP server that serve the text. A separate project that UrantiaHub uses.
+- [docs.urantia.dev](https://docs.urantia.dev): the API docs.
+- [Dalamatia](https://dalamatia.urantiahub.com): a story game set in Paper 66, with links back to the text here.
 
 ## License
 
