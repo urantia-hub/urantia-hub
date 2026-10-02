@@ -31,6 +31,7 @@ const releases: ReleaseEntry[] = [
       "Optimized email delivery system with Resend integration",
       "Improved SEO with accurate paper counts and metadata",
       "Better mobile app experience when installed as PWA",
+      "The old audio and data host, cdn.openurantia.com, now redirects permanently to cdn.urantia.dev. Existing links keep working, and you can update saved ones when convenient.",
     ],
     fixes: [
       "Fixed dark theme persistence across browser sessions",
