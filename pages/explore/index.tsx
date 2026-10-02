@@ -292,6 +292,18 @@ const ReadPage = ({ nodes = [] }: TOCPageProps) => {
         metaDescription="Explore the rich tapestry of wisdom within The Urantia Papers on UrantiaHub, discovering insights and teachings that resonate with you."
         titlePrefix="Explore"
         canonicalUrl="https://www.urantiahub.com/explore"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Explore the Urantia Papers",
+          "description": "Explore the rich tapestry of wisdom within The Urantia Papers on UrantiaHub, discovering insights and teachings that resonate with you.",
+          "url": "https://www.urantiahub.com/explore",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "UrantiaHub",
+            "url": "https://www.urantiahub.com"
+          }
+        }}
       />
 
       <Navbar />

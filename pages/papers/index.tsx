@@ -252,6 +252,18 @@ const ReadPage = ({ nodes = [] }: TOCPageProps) => {
         metaDescription="Find the Urantia Papers that resonate with you on UrantiaHub. With 197 papers, there is a wealth of wisdom to explore."
         titlePrefix="Papers"
         canonicalUrl="https://www.urantiahub.com/papers"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "The Urantia Papers",
+          "description": "Find the Urantia Papers that resonate with you on UrantiaHub. With 197 papers, there is a wealth of wisdom to explore.",
+          "url": "https://www.urantiahub.com/papers",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "UrantiaHub",
+            "url": "https://www.urantiahub.com"
+          }
+        }}
       />
 
       <Navbar />
