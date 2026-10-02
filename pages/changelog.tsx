@@ -92,13 +92,13 @@ const releases: ReleaseEntry[] = [
 ];
 
 const Changelog: NextPage = () => {
-  const renderChangeList = (items: string[] | undefined, icon: string, label: string) => {
+  const renderChangeList = (items: string[] | undefined, label: string) => {
     if (!items || items.length === 0) return null;
     
     return (
       <div className="mb-4 last:mb-0">
-        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-          {icon} {label}
+        <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
+          {label}
         </h4>
         <ul className="space-y-2 ml-2">
           {items.map((item, index) => (
@@ -170,9 +170,9 @@ const Changelog: NextPage = () => {
               )}
 
               <div className="space-y-4">
-                {renderChangeList(release.features, "✨", "New Features")}
-                {renderChangeList(release.improvements, "⚡", "Improvements")}
-                {renderChangeList(release.fixes, "🐛", "Bug Fixes")}
+                {renderChangeList(release.features, "New features")}
+                {renderChangeList(release.improvements, "Improvements")}
+                {renderChangeList(release.fixes, "Bug fixes")}
               </div>
             </article>
           ))}

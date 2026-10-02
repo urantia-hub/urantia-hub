@@ -98,7 +98,7 @@ function generateRssItem(release: ReleaseEntry): string {
   }
   
   if (release.features && release.features.length > 0) {
-    content += `<h3>New Features</h3><ul>`;
+    content += `<h3>New features</h3><ul>`;
     release.features.forEach((feature) => {
       content += `<li>${feature}</li>`;
     });
@@ -114,7 +114,7 @@ function generateRssItem(release: ReleaseEntry): string {
   }
   
   if (release.fixes && release.fixes.length > 0) {
-    content += `<h3>Bug Fixes</h3><ul>`;
+    content += `<h3>Bug fixes</h3><ul>`;
     release.fixes.forEach((fix) => {
       content += `<li>${fix}</li>`;
     });

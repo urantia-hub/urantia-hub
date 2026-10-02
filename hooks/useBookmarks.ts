@@ -102,7 +102,7 @@ export function useBookmarks(paperId: string, status: string) {
 
       const updatedBookmark = await response.json();
       setBookmarks((prev) => prev.map((b) => (b.id === updatedBookmark.id ? updatedBookmark : b)));
-      toast.success("Bookmark added to category! 🎉");
+      toast.success("Bookmark added to category");
     } catch (error) {
       console.error("Error updating bookmark category:", error);
       toast.error("Failed to assign bookmark to category, please try again");

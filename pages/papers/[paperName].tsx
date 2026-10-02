@@ -183,7 +183,7 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
       const node = selectedNode;
       toast.success(
         <div className="flex items-center justify-between w-full">
-          <span>Bookmark added! 🎉</span>
+          <span>Bookmark added</span>
           <button
             className="border-0 px-3 py-1 text-sm bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-white rounded transition-colors shadow-sm text-sm"
             onClick={() => {
@@ -393,7 +393,7 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
     navigator.clipboard.writeText(paperTextWithNodes);
 
     // Show success toast.
-    toast.success("Paper copied to clipboard! 🎉");
+    toast.success("Paper copied to clipboard");
   };
 
   const renderNode = (node: UBNode) => {

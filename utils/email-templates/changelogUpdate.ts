@@ -48,7 +48,7 @@ export const getChangelogUpdateEmailHTML = (
           props.version
         })</h2>
         <p style="color: #4b5563; font-size: 15px; line-height: 24px; margin: 0 0 24px;">
-          We've just released some exciting new features and improvements:
+          We've released new features and improvements:
         </p>
         <ul style="color: #4b5563; font-size: 15px; line-height: 24px; margin: 0 0 24px; padding-left: 20px;">
           ${props.changes
@@ -81,7 +81,7 @@ export const getChangelogUpdateEmailText = (
   return `
     New Updates to UrantiaHub v${props.version}
 
-    We've just released some exciting new features and improvements:
+    We've released new features and improvements:
 
     ${props.changes
       .map((change) => `- ${change.replace(/<[^>]+>/g, "")}`)

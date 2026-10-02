@@ -240,7 +240,7 @@ const Search = () => {
             {/* Search Tips */}
             <div className="bg-white dark:bg-neutral-700 rounded-lg p-6 shadow-sm fade-in">
               <h2 className="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">
-                Search Tips 💡
+                Search Tips
               </h2>
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-start gap-3">
