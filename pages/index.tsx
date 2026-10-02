@@ -178,6 +178,24 @@ const HomePage = () => {
           )}
         </section>
 
+        {/* What's New Banner */}
+        <div className="bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 border-b border-sky-100">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <Link
+              href="/changelog"
+              className="flex items-center justify-center gap-3 text-sm md:text-base text-gray-700 hover:text-sky-700 transition-colors duration-200 group"
+            >
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800 group-hover:bg-sky-200 transition-colors duration-200">
+                What&apos;s New
+              </span>
+              <span className="font-medium">v1.1.0: Search, Security & Performance</span>
+              <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+
         {/* Unique Ideas Section */}
         <section className="py-36 bg-white">
           <div className="max-w-7xl mx-auto px-6">

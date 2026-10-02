@@ -90,7 +90,7 @@ const Footer = ({ marginBottom }: { marginBottom?: string }) => {
                   className="text-gray-400 hover:text-blue-400 transition-colors duration-300 hover:no-underline"
                   href="/changelog"
                 >
-                  Latest Updates
+                  Releases
                 </Link>
               </li>
               <li>
