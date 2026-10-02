@@ -116,9 +116,21 @@ const resourceCategories = [
     title: "Study Resources",
     resources: [
       {
+        name: "urantia.dev",
+        description:
+          "API, docs, and tools for building with the Urantia Papers, for developers and AI agents",
+        url: "https://urantia.dev/",
+      },
+      {
         name: "Urantiapedia",
         description: "Comprehensive online encyclopedia for The Urantia Papers",
         url: "https://urantiapedia.org/",
+      },
+      {
+        name: "Dalamatia",
+        description:
+          "An interactive telling of Paper 66 and the city of Dalamatia, with links back to the text",
+        url: "https://dalamatia.urantiahub.com/",
       },
       {
         name: "Urantia University Institute",
