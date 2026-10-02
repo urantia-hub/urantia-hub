@@ -131,6 +131,7 @@ const Changelog: NextPage = () => {
             Stay up to date with new features, improvements, and updates
           </p>
           <div className="flex justify-center gap-4 text-sm">
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a
               href="/changelog.xml"
               className="text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:underline"
