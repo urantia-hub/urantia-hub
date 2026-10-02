@@ -298,10 +298,11 @@ const HomePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-xl leading-relaxed mb-6">
-                  The Urantia Papers are a unique collection of 196 papers
-                  authored by numerous celestial beings in 1934-1935, offering
-                  profound insights into human history, cosmology, and spiritual
-                  truth that bridge science, philosophy, and religion.
+                  The Urantia Papers are a unique collection of 197 papers
+                  (including the Foreword) authored by numerous celestial beings
+                  in 1934-1935, offering profound insights into human history,
+                  cosmology, and spiritual truth that bridge science, philosophy,
+                  and religion.
                 </p>
                 <p className="text-xl leading-relaxed">
                   <Link
@@ -706,16 +707,14 @@ const HomePage = () => {
                 description="See which passages resonate most with other readers. Discover how many others found specific teachings meaningful and impactful."
               />
               <CommunityFeature
-                comingSoon
                 icon={MessageSquare}
                 title="Public Notes"
-                description="Share your insights on specific passages and engage in meaningful discussions with other readers about their interpretations."
+                description="(Planned) Share your insights on specific passages and engage in meaningful discussions with other readers about their interpretations."
               />
               <CommunityFeature
-                comingSoon
                 icon={Store}
                 title="Community Marketplace"
-                description="Discover books, art, and other creative works inspired by these teachings. Share your own derivative works with the community."
+                description="(Planned) Discover books, art, and other creative works inspired by these teachings. Share your own derivative works with the community."
               />
             </div>
           </div>

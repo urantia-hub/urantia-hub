@@ -12,6 +12,18 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
+    date: "2026-01-15",
+    version: "1.1.0",
+    changes: [
+      "Upgraded to <strong>Next.js 15</strong> for improved performance and stability",
+      "Enhanced security with proper HTTP headers (X-Frame-Options, CSP, Referrer-Policy)",
+      "Improved error tracking and monitoring with Sentry optimizations",
+      "Fixed page crashes on client-side navigation for Papers and Explore pages",
+      "Resolved 91 security vulnerabilities through dependency updates",
+      "Optimized source map handling for better debugging while protecting code",
+    ],
+  },
+  {
     date: "2025-05-16",
     version: "1.0.3",
     changes: [
