@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 const DEFAULT_META_DESCRIPTION =
-  "Explore the Urantia Papers through a modern digital platform. Discover profound insights about science, spirituality, and human history. Join our community of truth-seekers for an enhanced reading experience with study tools and collaborative features.";
+  "Read and study the Urantia Papers online. Track your progress, keep bookmarks and notes, and search the full text.";
 
 type HeadTagProps = {
   metaDescription?: string;

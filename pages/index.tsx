@@ -22,8 +22,6 @@ import {
   SearchX,
   Share2,
   Sparkles,
-  MessageSquare,
-  Store,
 } from "lucide-react";
 import FeatureCard, { modernFeatures } from "@/components/HomepageFeatureCard";
 import CommunityFeature from "@/components/HomepageCommunityFeature";
@@ -130,12 +128,11 @@ const HomePage = () => {
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto w-full mt-[-5vh]">
             <h1 className="mt-0 mb-8 text-5xl md:text-7xl font-bold text-white max-w-4xl mx-auto leading-tight drop-shadow-lg">
-              Revolutionary Ideas for Life&apos;s Biggest Questions
+              Read the Urantia Papers
             </h1>
             <p className="text-xl md:text-2xl text-white mb-14 max-w-2xl mx-auto leading-relaxed drop-shadow">
-              Discover the Urantia Papers - a unique revelation that bridges
-              lost history with modern science, offering unprecedented insights
-              into our origin, history, and destiny.
+              All 197 papers, with your place saved, your notes beside the
+              text, and search across every paragraph.
             </p>
 
             {status === "authenticated" && (
@@ -203,17 +200,16 @@ const HomePage = () => {
               id="after-hero"
               className="text-4xl md:text-5xl font-semibold pb-1 mb-14 text-center bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-slate-400"
             >
-              Ideas That Challenge Our Understanding
+              What the Papers Cover
             </h2>
 
             <p className="text-xl text-center mb-16 max-w-3xl mx-auto text-gray-600 leading-relaxed">
-              The Urantia Papers present groundbreaking concepts about our
-              universe, human history, and spiritual reality that had never been
-              articulated before their publication in 1955.
+              The Urantia Papers discuss the universe, human history, and
+              spiritual life. They were first published in 1955.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8">
-              {/* Beyond Modern Science */}
+              {/* Cosmology */}
               <div className="group relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-[length:200%_100%] border-laser" />
 
@@ -226,7 +222,7 @@ const HomePage = () => {
                       />
                     </div>
                     <h3 className="text-xl font-semibold text-blue-900">
-                      Beyond Modern Science
+                      Cosmology
                     </h3>
                   </div>
                   <div className="relative">
@@ -235,15 +231,14 @@ const HomePage = () => {
                     <div className="absolute -left-4 bottom-0 w-16 h-16 bg-indigo-600/5 rounded-full blur-xl" />
 
                     <p className="relative text-blue-900/80 leading-relaxed">
-                      Detailed descriptions of universe mechanics and cosmic
-                      organization that transcend contemporary scientific
-                      understanding.
+                      Descriptions of the structure and organization of the
+                      universe.
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Human Origins Revealed */}
+              {/* Human History */}
               <div className="group relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-sm bg-[length:200%_100%] border-laser" />
 
@@ -256,7 +251,7 @@ const HomePage = () => {
                       />
                     </div>
                     <h3 className="text-xl font-semibold text-emerald-900">
-                      Human Origins Revealed
+                      Human History
                     </h3>
                   </div>
                   <div className="relative">
@@ -265,9 +260,8 @@ const HomePage = () => {
                     <div className="absolute -left-4 bottom-0 w-16 h-16 bg-green-600/5 rounded-full blur-xl" />
 
                     <p className="relative text-emerald-900/80 leading-relaxed">
-                      A comprehensive account of human civilization&apos;s
-                      beginnings that bridges anthropological findings with
-                      spiritual purpose.
+                      An account of the origin and history of human
+                      civilization.
                     </p>
                   </div>
                 </div>
@@ -286,7 +280,7 @@ const HomePage = () => {
                       />
                     </div>
                     <h3 className="text-xl font-semibold text-violet-900">
-                      Spiritual Reality Unified
+                      Science, Philosophy, and Religion
                     </h3>
                   </div>
                   <div className="relative">
@@ -295,9 +289,8 @@ const HomePage = () => {
                     <div className="absolute -left-4 bottom-0 w-16 h-16 bg-purple-600/5 rounded-full blur-xl" />
 
                     <p className="relative text-violet-900/80 leading-relaxed">
-                      A unique synthesis of science, philosophy, and religion
-                      that provides new perspectives on life&apos;s deepest
-                      questions.
+                      A view of science, philosophy, and religion as parts of
+                      one whole.
                     </p>
                   </div>
                 </div>
@@ -316,23 +309,18 @@ const HomePage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="text-xl leading-relaxed mb-6">
-                  The Urantia Papers are a unique collection of 197 papers
-                  (including the Foreword) authored by numerous celestial beings
-                  in 1934-1935, offering profound insights into human history,
-                  cosmology, and spiritual truth that bridge science, philosophy,
-                  and religion.
+                  The Urantia Papers are 197 papers, including the Foreword.
+                  They cover cosmology, human history, and the life and
+                  teachings of Jesus.
                 </p>
                 <p className="text-xl leading-relaxed">
                   <Link
                     className="text-blue-400 hover:text-blue-600 hover:no-underline transition-colors duration-200"
                     href="https://urantia.org"
                   >
-                    The Urantia Book Foundation
+                    Urantia Foundation
                   </Link>{" "}
-                  compiled and published these papers as a book in 1955,
-                  inspiring millions worldwide with their groundbreaking
-                  insights into our relationship with the universe and divine
-                  purpose.
+                  first published them as The Urantia Book in 1955.
                 </p>
               </div>
               <div className="relative h-96">
@@ -449,11 +437,11 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Revolutionary Insights Section */}
+        {/* Four Parts Section */}
         <section className="pt-10 pb-56 bg-black text-white relative">
           <div className="max-w-7xl mx-auto px-6">
             <h2 className="text-4xl md:text-5xl font-semibold pb-1 mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-100 to-white">
-              Revolutionary Insights
+              The Four Parts
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
@@ -709,8 +697,7 @@ const HomePage = () => {
               Community Hub
             </h2>
             <p className="text-xl text-center mb-16 max-w-3xl mx-auto text-slate-600">
-              Discover insights from fellow readers and share your own
-              contributions to this growing community of truth-seekers.
+              Share a passage, and see which passages other readers marked.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -723,16 +710,6 @@ const HomePage = () => {
                 icon={Bookmark}
                 title="Popular Passages"
                 description="See which passages resonate most with other readers. Discover how many others found specific teachings meaningful and impactful."
-              />
-              <CommunityFeature
-                icon={MessageSquare}
-                title="Public Notes"
-                description="(Planned) Share your insights on specific passages and engage in meaningful discussions with other readers about their interpretations."
-              />
-              <CommunityFeature
-                icon={Store}
-                title="Community Marketplace"
-                description="(Planned) Discover books, art, and other creative works inspired by these teachings. Share your own derivative works with the community."
               />
             </div>
           </div>
@@ -797,21 +774,14 @@ const HomePage = () => {
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
             <h2 className="text-5xl md:text-7xl pb-2 font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200">
-              Let&apos;s Learn Together
+              Start Reading
             </h2>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed text-indigo-200">
-              Join a vibrant community of curious minds exploring life&apos;s
-              deepest mysteries. Share insights, connect ideas, and discover new
-              perspectives as we piece together this fascinating cosmic puzzle.
-            </p>
-            <p className="text-lg mb-12 max-w-2xl mx-auto leading-relaxed text-indigo-300/80">
-              Whether you&apos;re a first-time reader or a long-time student,
-              there&apos;s always something new to discover when we learn
-              together.
+            <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed text-indigo-200">
+              Start with the Foreword, or pick any paper.
             </p>
             <div className="inline-block p-[2px] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-lg">
               <p className="text-indigo-200 px-4 sm:px-6 py-3 bg-indigo-900/50 backdrop-blur-sm rounded-lg text-sm sm:text-base whitespace-nowrap">
-                Free access • Start your journey today
+                No account needed to read.
               </p>
             </div>
             <div className="mt-12">
@@ -821,7 +791,7 @@ const HomePage = () => {
                 </TiltButton>
               )}
               {status === "unauthenticated" && (
-                <TiltButton href="/auth/sign-in">Join the Community</TiltButton>
+                <TiltButton href="/auth/sign-in">Create an Account</TiltButton>
               )}
             </div>
           </div>
