@@ -11,7 +11,10 @@ import HeadTag from "@/components/HeadTag";
 import HomepageNavbar from "@/components/HomepageNavbar";
 import ParticleBackground from "@/components/ParticleBackground";
 import TiltButton from "@/components/TiltButton";
-import { deriveReadLink } from "@/utils/readPaperLink";
+import {
+  deriveReadLink,
+  deriveSignedOutReadButton,
+} from "@/utils/readPaperLink";
 import {
   AlertCircle,
   Atom,
@@ -35,6 +38,7 @@ const HomePage = () => {
   const [lastVisitedNode, setLastVisitedNode] =
     useState<LastVisitedNode | null>(null);
   const [showDownButton, setShowDownButton] = useState<boolean>(true);
+  const signedOutReadButton = deriveSignedOutReadButton(lastVisitedNode);
 
   const fetchLastVisitedNode = async () => {
     try {
@@ -141,7 +145,9 @@ const HomePage = () => {
               </TiltButton>
             )}
             {status === "unauthenticated" && (
-              <TiltButton href="/auth/sign-in">Start Reading</TiltButton>
+              <TiltButton href={signedOutReadButton.href}>
+                {signedOutReadButton.label}
+              </TiltButton>
             )}
           </div>
 

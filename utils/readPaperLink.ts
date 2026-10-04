@@ -29,3 +29,19 @@ export const deriveReadLink = (
 
   return "/api/redirect/user/read";
 };
+
+type SavedPlace = { paperId?: string | null; globalId?: string | null } | null;
+
+// The hero button for a signed-out reader: the saved place, or the Foreword.
+export const deriveSignedOutReadButton = (
+  savedPlace: SavedPlace
+): { href: string; label: string } => {
+  if (savedPlace?.paperId && savedPlace?.globalId) {
+    return {
+      href: `/api/redirect/user/read?paperId=${savedPlace.paperId}&globalId=${savedPlace.globalId}`,
+      label: "Continue Reading",
+    };
+  }
+
+  return { href: "/papers/foreword", label: "Start Reading" };
+};
