@@ -14,6 +14,7 @@ export const getServerSideProps = async ({ res }: any) => {
     { url: `${baseUrl}/blockchain-archive`, priority: "1.0" },
     { url: `${baseUrl}/community-resources`, priority: "1.0" },
     { url: `${baseUrl}/explore`, priority: "1.0" },
+    { url: `${baseUrl}/explore/parallels`, priority: "1.0" },
     { url: `${baseUrl}/papers`, priority: "1.0" },
     { url: `${baseUrl}/search`, priority: "1.0" },
     {

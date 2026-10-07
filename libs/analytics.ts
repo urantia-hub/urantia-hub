@@ -12,7 +12,9 @@ export type AnalyticsEvent =
   | "paper_opened"
   | "section_read"
   | "search_performed"
-  | "community_resource_clicked";
+  | "community_resource_clicked"
+  | "parallels_opened"
+  | "parallels_searched";
 
 // Values are ids, counts, and labels. Never paragraph text, search text, or an email.
 type EventProperties = Record<string, string | number | boolean | null>;

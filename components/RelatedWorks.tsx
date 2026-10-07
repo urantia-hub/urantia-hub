@@ -5,6 +5,7 @@ import { useState } from "react";
 import Modal from "@/components/Modal";
 import Spinner from "@/components/Spinner";
 import { paperIdToUrl } from "@/utils/paperFormatters";
+import { paragraphPath } from "@/utils/parallels";
 import { renderLeadingText } from "@/utils/renderNode";
 import type {
   ApiBibleParallel,
@@ -68,7 +69,15 @@ const RelatedWorks = ({
   return (
     <Modal onClose={onClose}>
       <div className="flex flex-col px-4 py-3 max-h-[85vh]">
-        <h2 className="text-2xl mb-3 pr-8">Cross-references</h2>
+        <h2 className="text-2xl mb-1 pr-8">Cross-references</h2>
+        {node?.standardReferenceId && (
+          <Link
+            href={paragraphPath(node.standardReferenceId)}
+            className="text-sm text-sky-500 dark:text-sky-400 mb-3"
+          >
+            Explore these in Parallels ›
+          </Link>
+        )}
 
         {node && (
           <div className="leading-relaxed border-l-4 border-gray-200 dark:border-gray-500 pl-3 pb-1 mb-3">

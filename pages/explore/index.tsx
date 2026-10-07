@@ -319,6 +319,21 @@ const ReadPage = ({ nodes = [] }: TOCPageProps) => {
             <div className="mt-4 mb-4 text-center">
               <h1 className="text-5xl font-bold mb-8">Explore</h1>
 
+              {/* Parallels */}
+              <Link
+                href="/explore/parallels"
+                className="block mb-8 text-left rounded bg-white dark:bg-neutral-700 hover:dark:bg-neutral-600 px-4 py-3 hover:no-underline hover:shadow-lg hover:dark:shadow-none transition-shadow duration-300"
+              >
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-gray-600 dark:text-white m-0">Parallels</h2>
+                  <span className="text-sm text-sky-600 dark:text-sky-400">Open ›</span>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-300 mt-1 mb-0">
+                  Read any paragraph beside the closest passages in the world&apos;s scriptures, and
+                  follow the links from one to the next.
+                </p>
+              </Link>
+
               {/* Featured Passages */}
               {!fetchingFeaturedQuotes && featuredQuotes?.length ? (
                 <div className="mb-8 fade-in">
