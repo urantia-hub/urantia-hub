@@ -93,7 +93,8 @@ const ParallelsHome = ({ corpora, featured }: ParallelsHomeProps) => {
         }}
       />
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 mt-8 mb-16 max-w-2xl">
+      {/* ph-no-capture: no autocapture here; these pages send named events instead. */}
+      <main className="ph-no-capture flex-grow container mx-auto px-4 mt-8 mb-16 max-w-2xl">
         <h1 className="text-4xl font-bold text-center mb-2">Parallels</h1>
         <p className="text-sm text-center text-gray-500 dark:text-gray-400 mb-6">
           Any paragraph of the Urantia Papers, beside the closest passages in the world&apos;s

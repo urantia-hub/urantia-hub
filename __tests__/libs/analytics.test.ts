@@ -6,6 +6,7 @@ const posthog = vi.hoisted(() => ({
   capture: vi.fn(),
   identify: vi.fn(),
   reset: vi.fn(),
+  get_property: vi.fn(),
 }));
 vi.mock("posthog-js", () => ({ default: posthog }));
 
@@ -50,6 +51,7 @@ describe("analytics with a key", () => {
     expect(config.disable_session_recording).toBe(true);
     expect(config.cross_subdomain_cookie).toBe(true);
     expect(config.custom_personal_data_properties).toContain("q");
+    expect(config.mask_all_text).toBe(true);
     expect(config.autocapture.element_allowlist).not.toContain("p");
     expect(config.autocapture.element_allowlist).not.toContain("div");
     expect(posthog.register).toHaveBeenCalledWith({ app: "hub" });
@@ -74,5 +76,25 @@ describe("analytics with a key", () => {
     });
     expect(posthog.identify).toHaveBeenCalledWith("user-1");
     expect(posthog.reset).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("reset on a signed-out load", () => {
+  it("clears an id a previous user left, and nothing else", async () => {
+    const analytics = await load("phc_test");
+    analytics.initAnalytics();
+    posthog.get_property.mockReturnValueOnce("anonymous");
+    analytics.resetIfIdentified();
+    expect(posthog.reset).not.toHaveBeenCalled();
+    posthog.get_property.mockReturnValueOnce("identified");
+    analytics.resetIfIdentified();
+    expect(posthog.reset).toHaveBeenCalledTimes(1);
+    expect(posthog.get_property).toHaveBeenCalledWith("$user_state");
+  });
+
+  it("is a no-op before init", async () => {
+    const analytics = await load("phc_test");
+    analytics.resetIfIdentified();
+    expect(posthog.get_property).not.toHaveBeenCalled();
   });
 });

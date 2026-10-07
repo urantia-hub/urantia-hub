@@ -364,7 +364,7 @@ const ReadPage = ({ nodes = [] }: TOCPageProps) => {
                             href={`/papers/${paperIdToUrl(
                               `${quote.paperId}`
                             )}#${quote.globalId}`}
-                            className="relative flex flex-col items-start text-left px-6 pt-5 pb-10 bg-white dark:bg-neutral-700 hover:dark:bg-neutral-600 rounded transition-colors hover:no-underline hover:shadow-lg hover:dark:shadow-none transition-shadow duration-300"
+                            className="ph-no-capture relative flex flex-col items-start text-left px-6 pt-5 pb-10 bg-white dark:bg-neutral-700 hover:dark:bg-neutral-600 rounded transition-colors hover:no-underline hover:shadow-lg hover:dark:shadow-none transition-shadow duration-300"
                           >
                             {/* Paper Info */}
                             <div className="flex flex-col w-full mb-2">

@@ -9,7 +9,7 @@ import type { AppProps } from "next/app";
 import type { NextComponentType, NextPageContext } from "next";
 // Relative modules.
 import { ThemeProvider } from "@/context/theme";
-import { identifyUser, initAnalytics, resetUser } from "@/libs/analytics";
+import { identifyUser, initAnalytics, resetIfIdentified, resetUser } from "@/libs/analytics";
 import "@/styles/globals.css";
 import SentryErrorBoundary from "@/components/SentryErrorBoundary";
 import { Toaster } from "sonner";
@@ -49,8 +49,9 @@ function AppContent({ Component, pageProps }: AppContentProps) {
     if (status === "authenticated" && userId) {
       identifyUser(userId);
       wasSignedIn.current = true;
-    } else if (status === "unauthenticated" && wasSignedIn.current) {
-      resetUser();
+    } else if (status === "unauthenticated") {
+      if (wasSignedIn.current) resetUser();
+      else resetIfIdentified();
       wasSignedIn.current = false;
     }
   }, [status, userId]);

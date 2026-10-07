@@ -37,6 +37,9 @@ export function initAnalytics(): void {
     autocapture: {
       element_allowlist: ["a", "button", "form", "input", "select", "textarea", "label"],
     },
+    // No element text in autocapture. A link can wrap a passage (a Parallels card, a
+    // featured quote), and its text would otherwise be sent with the click.
+    mask_all_text: true,
     // Strips ?q= from captured URLs. The search text never leaves the site.
     mask_personal_data_properties: true,
     custom_personal_data_properties: ["q"],
@@ -58,4 +61,11 @@ export function identifyUser(userId: string): void {
 export function resetUser(): void {
   if (!started) return;
   posthog.reset();
+}
+
+// A sign-out reloads the page, so the app never sees the session end. On a signed-out
+// load, clear an id that a previous user left on this device.
+export function resetIfIdentified(): void {
+  if (!started) return;
+  if (posthog.get_property("$user_state") === "identified") posthog.reset();
 }

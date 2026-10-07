@@ -184,7 +184,8 @@ const ParallelsPage = (props: PageProps) => {
     <div className="flex flex-col min-h-screen bg-slate-100 text-gray-700 dark:bg-neutral-800 dark:text-white">
       <HeadTag titlePrefix={title} metaDescription={description} canonicalUrl={`${SITE}${href}`} />
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 mt-4 mb-16 max-w-2xl">
+      {/* ph-no-capture: no autocapture here; these pages send named events instead. */}
+      <main className="ph-no-capture flex-grow container mx-auto px-4 mt-4 mb-16 max-w-2xl">
         <Trail href={href} label={label} />
         {props.kind === "paragraph" ? (
           <CompareView paragraph={props.paragraph} />
