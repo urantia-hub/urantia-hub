@@ -86,6 +86,7 @@ describe("groupByCorpus and compareGroups", () => {
 
   it("falls back to the religion for a text with no short name", () => {
     expect(shortName({ slug: "avesta", religion: "Zoroastrianism" })).toBe("Zoroastrianism");
+    expect(shortName({ slug: "bible", religion: "Judaism and Christianity" })).toBe("Bible");
   });
 });
 

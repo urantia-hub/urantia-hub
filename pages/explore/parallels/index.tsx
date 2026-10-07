@@ -36,6 +36,14 @@ const PAPER_131 = [
   { ref: "131:9.2", label: "Confucianism" },
 ];
 
+// The four insight lists.
+const PATTERNS = [
+  { href: "/explore/parallels/pairs", title: "Pairs that find each other", text: "A paragraph and a passage that are each other's closest match." },
+  { href: "/explore/parallels/currents", title: "Shared currents", text: "Paragraphs close to many of the texts at once." },
+  { href: "/explore/parallels/leans", title: "Where paragraphs lean", text: "Paragraphs much closer to one text than to the others." },
+  { href: "/explore/parallels/far", title: "Far from these texts", text: "Paragraphs with no close passage in any text." },
+];
+
 type Featured = {
   ref: string;
   paperTitle: string;
@@ -179,6 +187,21 @@ const ParallelsHome = ({ corpora, featured }: ParallelsHomeProps) => {
                         · {f.closest.religion}
                       </div>
                     )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="text-lg font-bold mt-8 mb-3">Patterns</h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 list-none p-0 m-0">
+              {PATTERNS.map((pattern) => (
+                <li key={pattern.href}>
+                  <Link
+                    href={pattern.href}
+                    className="block h-full rounded-lg bg-white dark:bg-neutral-700 p-4 hover:no-underline hover:shadow-lg hover:dark:shadow-none transition-shadow duration-300"
+                  >
+                    <div className="font-bold text-gray-700 dark:text-white">{pattern.title}</div>
+                    <p className="text-xs text-gray-500 dark:text-gray-300 mt-1 mb-0">{pattern.text}</p>
                   </Link>
                 </li>
               ))}

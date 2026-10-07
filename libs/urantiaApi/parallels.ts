@@ -35,6 +35,7 @@ export type ParagraphWithParallels = {
   text: string;
   scriptureParallels: ApiScriptureParallel[];
   bibleParallels: ApiBibleParallel[];
+  scriptureScores: ParagraphScores | null;
   navigation: { prev: string | null; next: string | null };
 };
 
@@ -70,7 +71,7 @@ export async function fetchParagraphWithParallels(ref: string): Promise<Paragrap
   const json = await getJson<{
     data: Omit<ParagraphWithParallels, "navigation">;
     navigation: { prev: string | null; next: string | null };
-  }>(`/paragraphs/${encodeURIComponent(ref)}?include=scriptureParallels,bibleParallels`);
+  }>(`/paragraphs/${encodeURIComponent(ref)}?include=scriptureParallels,bibleParallels,scriptureScores`);
   const d = json.data;
   return {
     id: d.id,
@@ -81,6 +82,7 @@ export async function fetchParagraphWithParallels(ref: string): Promise<Paragrap
     text: d.text,
     scriptureParallels: d.scriptureParallels ?? [],
     bibleParallels: (d.bibleParallels ?? []).slice(0, 3),
+    scriptureScores: d.scriptureScores ?? null,
     navigation: json.navigation ?? { prev: null, next: null },
   };
 }
@@ -168,3 +170,60 @@ export async function searchParallels(q: string): Promise<SearchResults> {
     })),
   };
 }
+
+// --- Insights: scores across the texts ---
+
+type CorpusSummary = ApiScriptureParallel["corpus"];
+
+export type InsightParagraph = {
+  id: string;
+  standardReferenceId: string;
+  paperId: string;
+  paperTitle: string;
+  sectionTitle: string | null;
+  text: string;
+};
+
+export type ScoredItem = {
+  paragraph: InsightParagraph;
+  textsClose: number;
+  consensus: number;
+  distance: number;
+  closest: { corpus: CorpusSummary; percentile: number }[];
+};
+
+export type PairItem = {
+  paragraph: InsightParagraph;
+  corpus: CorpusSummary;
+  passage: { chunkId: string; reference: string; text: string };
+  similarity: number;
+  similaritySmall: number;
+};
+
+export type LeanItem = { paragraph: InsightParagraph; corpus: CorpusSummary; gap: number; percentile: number };
+
+export type Paged<T> = { data: T[]; meta: { page: number; limit: number; total: number; totalPages: number } };
+
+export type ParagraphScores = {
+  textsClose: number;
+  consensus: number;
+  distance: number;
+  lean: { corpus: CorpusSummary; gap: number } | null;
+  mutualPairs: { corpus: CorpusSummary; passage: { chunkId: string; reference: string; text: string } }[];
+  profile: { corpus: CorpusSummary; percentile: number }[];
+};
+
+type InsightParams = Record<string, string | number | undefined>;
+
+function query(params: InsightParams): string {
+  const q = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== "") q.set(k, String(v));
+  const s = q.toString();
+  return s ? `?${s}` : "";
+}
+
+export const fetchSharedCurrents = (p: InsightParams) =>
+  getJson<Paged<ScoredItem>>(`/scriptures/insights/shared-currents${query(p)}`);
+export const fetchFarFromTexts = (p: InsightParams) => getJson<Paged<ScoredItem>>(`/scriptures/insights/far${query(p)}`);
+export const fetchMutualPairs = (p: InsightParams) => getJson<Paged<PairItem>>(`/scriptures/insights/pairs${query(p)}`);
+export const fetchLeans = (p: InsightParams) => getJson<Paged<LeanItem>>(`/scriptures/insights/leans${query(p)}`);

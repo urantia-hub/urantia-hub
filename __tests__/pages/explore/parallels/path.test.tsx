@@ -53,6 +53,21 @@ describe("Parallels compare view", () => {
     expect(screen.queryByText("Oracle 15")).toBeNull();
   });
 
+  it("shows the score line with links to the lists and the pair", () => {
+    const scores = {
+      textsClose: 8,
+      consensus: 0.9,
+      distance: 0.02,
+      lean: { corpus: oracles, gap: 0.2 },
+      mutualPairs: [{ corpus: oracles, passage: { chunkId: "o:15", reference: "Oracle 15", text: "t" } }],
+      profile: [],
+    };
+    render(<ParallelsPage kind="paragraph" paragraph={{ ...paragraph, scriptureScores: scores } as never} />);
+    expect(screen.getByRole("link", { name: "Close in 8 of 10 texts" })).toHaveAttribute("href", "/explore/parallels/currents");
+    expect(screen.getByRole("link", { name: "Leans toward Shinto oracles" })).toHaveAttribute("href", "/explore/parallels/leans?text=shinto-oracles");
+    expect(screen.getByRole("link", { name: "Pairs with Oracle 15" })).toHaveAttribute("href", "/explore/parallels/shinto-oracles/15");
+  });
+
   it("adds the page to the trail", () => {
     render(<ParallelsPage kind="paragraph" paragraph={paragraph as never} />);
     expect(screen.getByRole("navigation", { name: "Your path" }).textContent).toContain("131:7.2");

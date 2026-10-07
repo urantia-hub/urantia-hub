@@ -83,6 +83,7 @@ const SHORT_NAMES: Record<string, string> = {
   analects: "Analects",
   quran: "Quran",
   japji: "Japji",
+  bible: "Bible",
 };
 
 export function shortName(corpus: { slug: string; religion: string }): string {
@@ -182,3 +183,23 @@ export function compareGroups(p: {
   return groups;
 }
 
+
+// How the four insight lists are measured, in plain words. Shown on each list.
+export const INSIGHTS_METHOD =
+  "For each of the ten texts (the nine world religions texts and the Bible), a paragraph's closest passage is ranked against every other paragraph's, after an adjustment for paragraph length. \"Close in a text\" means the paragraph is in that text's top 10%. The texts often move together, because a paragraph that sounds devotional is close to many of them, so a count of texts is not a count of independent votes. Leans and pairs must hold under two different embedding models. All of this measures closeness in meaning by a language model. It does not say that two teachings are the same, or where any text came from.";
+
+export const PART_FILTERS: { id: string; label: string }[] = [
+  { id: "", label: "All parts" },
+  { id: "1", label: "Part I" },
+  { id: "2", label: "Part II" },
+  { id: "3", label: "Part III" },
+  { id: "4", label: "Part IV" },
+];
+
+/** Builds a list URL with only the non-empty query values. */
+export function listHref(path: string, params: Record<string, string | number | undefined>): string {
+  const q = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== "" && v !== 0) q.set(k, String(v));
+  const s = q.toString();
+  return s ? `${path}?${s}` : path;
+}

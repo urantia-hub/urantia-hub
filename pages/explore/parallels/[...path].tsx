@@ -1,7 +1,7 @@
 // Node modules.
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 // Relative modules.
 import Footer from "@/components/Footer";
 import HeadTag from "@/components/HeadTag";
@@ -19,13 +19,72 @@ import {
   type PassageWithParallels,
 } from "@/libs/urantiaApi/parallels";
 import { paperIdToUrl } from "@/utils/paperFormatters";
-import { compareGroups, paragraphPath, passagePath, percent } from "@/utils/parallels";
+import {
+  PARALLELS_ROOT,
+  bibleRefFromChunkId,
+  compareGroups,
+  listHref,
+  paragraphPath,
+  passagePath,
+  passageRefFromLabel,
+  percent,
+  shortName,
+} from "@/utils/parallels";
 
 const SITE = "https://www.urantiahub.com";
 
 type PageProps =
   | { kind: "paragraph"; paragraph: ParagraphWithParallels }
   | { kind: "passage"; passage: PassageWithParallels; path: string };
+
+// One line of the paragraph's scores, each part linking to its list.
+const ScoreLine = ({ scores }: { scores: NonNullable<ParagraphWithParallels["scriptureScores"]> }) => {
+  const parts: { key: string; node: ReactNode }[] = [
+    {
+      key: "close",
+      node: (
+        <Link href={`${PARALLELS_ROOT}/currents`} className="text-sky-600 dark:text-sky-400">
+          Close in {scores.textsClose} of 10 texts
+        </Link>
+      ),
+    },
+  ];
+  if (scores.lean) {
+    parts.push({
+      key: "lean",
+      node: (
+        <Link href={listHref(`${PARALLELS_ROOT}/leans`, { text: scores.lean.corpus.slug })} className="text-sky-600 dark:text-sky-400">
+          Leans toward {shortName(scores.lean.corpus)}
+        </Link>
+      ),
+    });
+  }
+  for (const pair of scores.mutualPairs.slice(0, 2)) {
+    const c = pair.corpus;
+    const href =
+      c.slug === "bible"
+        ? passagePath("bible", bibleRefFromChunkId(pair.passage.chunkId))
+        : passagePath(c.slug, passageRefFromLabel(pair.passage.reference, c.refPrefix));
+    parts.push({
+      key: pair.passage.chunkId,
+      node: (
+        <Link href={href} className="text-sky-600 dark:text-sky-400">
+          Pairs with {pair.passage.reference}
+        </Link>
+      ),
+    });
+  }
+  return (
+    <p className="text-xs text-gray-400 mt-3 mb-0 flex flex-wrap gap-x-2 gap-y-1">
+      {parts.map((part, i) => (
+        <span key={part.key}>
+          {part.node}
+          {i < parts.length - 1 && <span aria-hidden="true"> ·</span>}
+        </span>
+      ))}
+    </p>
+  );
+};
 
 const CompareView = ({ paragraph: p }: { paragraph: ParagraphWithParallels }) => {
   const groups = compareGroups(p);
@@ -70,6 +129,8 @@ const CompareView = ({ paragraph: p }: { paragraph: ParagraphWithParallels }) =>
           </Link>
         </div>
       </article>
+
+      {p.scriptureScores && <ScoreLine scores={p.scriptureScores} />}
 
       <h2 className="text-lg font-bold mt-6 mb-2">Closest passages</h2>
       <div ref={chipsRef} className="flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Texts">
