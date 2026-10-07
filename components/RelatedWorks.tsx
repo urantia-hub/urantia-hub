@@ -8,18 +8,21 @@ import { paperIdToUrl } from "@/utils/paperFormatters";
 import { renderLeadingText } from "@/utils/renderNode";
 import type {
   ApiBibleParallel,
+  ApiScriptureParallel,
   ApiUrantiaParallel,
 } from "@/libs/urantiaApi/types";
 
 const TEXT_PREVIEW = 220;
 
-type TabId = "urantia" | "bible";
+export type TabId = "urantia" | "bible" | "religions";
 
 type RelatedWorksProps = {
   onClose?: () => void;
   node?: UBNode;
   urantiaParallels: ApiUrantiaParallel[];
   bibleParallels: ApiBibleParallel[];
+  scriptureParallels?: ApiScriptureParallel[];
+  initialTab?: TabId;
   loading: boolean;
   error: string;
 };
@@ -34,10 +37,12 @@ const RelatedWorks = ({
   node,
   urantiaParallels,
   bibleParallels,
+  scriptureParallels = [],
+  initialTab = "urantia",
   loading,
   error,
 }: RelatedWorksProps) => {
-  const [activeTab, setActiveTab] = useState<TabId>("urantia");
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
   // Per-card "Read more" toggles, keyed by parallel id (chunkId for Bible, id for UB).
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -53,6 +58,11 @@ const RelatedWorks = ({
   const tabs: Array<{ id: TabId; label: string; count: number }> = [
     { id: "urantia", label: "Urantia", count: urantiaParallels.length },
     { id: "bible", label: "Bible", count: bibleParallels.length },
+    {
+      id: "religions",
+      label: "World religions",
+      count: Array.from(new Set(scriptureParallels.map((p) => p.corpus.id))).length,
+    },
   ];
 
   return (
@@ -80,7 +90,7 @@ const RelatedWorks = ({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-2 px-3 text-sm font-medium border-0 bg-transparent transition-colors duration-200 -mb-px ${
+                className={`flex-1 py-2 px-2 sm:px-3 text-sm font-medium whitespace-nowrap border-0 bg-transparent transition-colors duration-200 -mb-px ${
                   isActive
                     ? "text-sky-500 dark:text-sky-400 border-b-2 border-sky-500 dark:border-sky-400"
                     : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white"
@@ -126,6 +136,14 @@ const RelatedWorks = ({
           {!loading && !error && activeTab === "bible" && (
             <BibleList
               parallels={bibleParallels}
+              expanded={expanded}
+              onToggle={toggleExpanded}
+            />
+          )}
+
+          {!loading && !error && activeTab === "religions" && (
+            <ScriptureList
+              parallels={scriptureParallels}
               expanded={expanded}
               onToggle={toggleExpanded}
             />
@@ -238,6 +256,102 @@ function BibleList({ parallels, expanded, onToggle }: ListProps<ApiBibleParallel
         );
       })}
     </ul>
+  );
+}
+
+// One group per text, sorted by its closest passage. Each group shows its best
+// passage; the reader can open the others.
+function ScriptureList({ parallels, expanded, onToggle }: ListProps<ApiScriptureParallel>) {
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  if (parallels.length === 0) {
+    return (
+      <p className="text-gray-400 text-sm py-6 text-center">
+        No passages found.
+      </p>
+    );
+  }
+  const groups = new Map<string, ApiScriptureParallel[]>();
+  for (const p of parallels) groups.set(p.corpus.id, [...(groups.get(p.corpus.id) ?? []), p]);
+  const sorted = Array.from(groups.values())
+    .map((list) => [...list].sort((a, b) => b.similarity - a.similarity))
+    .sort((a, b) => (b[0]?.similarity ?? 0) - (a[0]?.similarity ?? 0));
+  const toggleGroup = (id: string) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  return (
+    <div>
+      <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">
+        Passages close in meaning, found by a language model. A match does not mean the teachings are the same.
+      </p>
+      <ul className="space-y-3 list-none p-0 m-0">
+        {sorted.map((list) => {
+          const corpus = list[0]!.corpus;
+          const isOpen = openGroups.has(corpus.id);
+          const shown = isOpen ? list : list.slice(0, 1);
+          return (
+            <li key={corpus.id}>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span className="font-semibold text-gray-700 dark:text-gray-200">{corpus.title}</span>
+                {" · "}
+                {corpus.religion}
+              </div>
+              <ul className="space-y-2 list-none p-0 m-0">
+                {shown.map((p) => {
+                  const isExpanded = expanded.has(p.chunkId);
+                  const isLong = p.text.length > TEXT_PREVIEW;
+                  return (
+                    <li
+                      key={p.chunkId}
+                      className="rounded-md border border-gray-200 dark:border-zinc-700 p-3 sm:p-4 bg-slate-50 dark:bg-zinc-900"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          {p.reference}
+                        </span>
+                        <span className="rounded bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 text-xs">
+                          {Math.round(p.similarity * 100)}%
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {isExpanded ? p.text : truncate(p.text, TEXT_PREVIEW)}
+                      </p>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                        {isLong && (
+                          <button
+                            type="button"
+                            onClick={() => onToggle(p.chunkId)}
+                            className="text-xs font-medium text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300 bg-transparent border-0 p-0"
+                          >
+                            {isExpanded ? "Read less" : "Read more"}
+                          </button>
+                        )}
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                          Tr. {corpus.translator}, {corpus.year}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              {list.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(corpus.id)}
+                  className="mt-1.5 text-xs font-medium text-sky-500 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-300 bg-transparent border-0 p-0"
+                >
+                  {isOpen ? "Show fewer" : `${list.length - 1} more from ${corpus.title}`}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 

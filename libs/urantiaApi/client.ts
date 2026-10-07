@@ -125,7 +125,7 @@ export async function fetchParagraphParallels(
 ): Promise<ParagraphParallels> {
   const url = `${API_HOST}/paragraphs/${encodeURIComponent(
     ref
-  )}?include=bibleParallels,urantiaParallels`;
+  )}?include=bibleParallels,urantiaParallels,scriptureParallels`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(
@@ -136,6 +136,7 @@ export async function fetchParagraphParallels(
   return {
     urantiaParallels: json.data.urantiaParallels ?? [],
     bibleParallels: json.data.bibleParallels ?? [],
+    scriptureParallels: json.data.scriptureParallels ?? [],
   };
 }
 

@@ -832,6 +832,7 @@ const PaperPage = ({ paperData }: PaperPageProps) => {
           onClose={onRelatedWorksClose}
           urantiaParallels={activeParallels?.urantiaParallels ?? []}
           bibleParallels={activeParallels?.bibleParallels ?? []}
+          scriptureParallels={activeParallels?.scriptureParallels ?? []}
           loading={parallelsLoading}
           error={parallelsError}
         />

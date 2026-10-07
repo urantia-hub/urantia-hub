@@ -75,6 +75,27 @@ export type ApiBibleParallel = {
   embeddingModel: string;
 };
 
+// One passage from a world religions text near a Urantia paragraph (UB → scripture).
+export type ApiScriptureParallel = {
+  chunkId: string;
+  reference: string; // "Dhp 3-5", "BG 2.47-49", "Oracle 15"
+  corpus: {
+    id: string;
+    slug: string;
+    religion: string;
+    title: string;
+    translator: string;
+    year: number;
+    refPrefix: string;
+    urantiaSection: string | null;
+  };
+  text: string;
+  similarity: number;
+  rank: number;
+  source: string;
+  embeddingModel: string;
+};
+
 // One Urantia paragraph semantically related to another Urantia paragraph (UB → UB).
 export type ApiUrantiaParallel = {
   id: string;
@@ -94,6 +115,7 @@ export type ApiParagraphWithParallelsResponse = {
   data: ApiParagraph & {
     bibleParallels: ApiBibleParallel[];
     urantiaParallels: ApiUrantiaParallel[];
+    scriptureParallels?: ApiScriptureParallel[];
   };
 };
 
@@ -101,6 +123,7 @@ export type ApiParagraphWithParallelsResponse = {
 export type ParagraphParallels = {
   urantiaParallels: ApiUrantiaParallel[];
   bibleParallels: ApiBibleParallel[];
+  scriptureParallels: ApiScriptureParallel[];
 };
 
 // POST /search result item (htmlText is already enriched with highlight spans)
